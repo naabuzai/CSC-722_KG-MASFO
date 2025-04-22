@@ -1,7 +1,7 @@
 
 # 🌾 KG-MASFO: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
 
-![KG-MASFO Pipeline](Presentation/kgmasfo_pipeline.png)
+![KG-MASFO Pipeline](https://github.com/naabuzai/KG-MASFO/blob/main/images/MASFO_KG.png)
 
 **KG-MASFO** is an explainable AI system for optimizing fertilizer recommendations using a knowledge graph (KG) constructed from real agricultural data. The system includes GNN-based multi-agent reasoning, attention fusion, symbolic interpretation, and interactive querying.
 
