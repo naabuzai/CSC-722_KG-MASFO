@@ -96,15 +96,10 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 ### 📋 Model Comparison
 
+
+> **Table I**: The proposed KG-MASFO outperforms both single-agent and GNN models on MSE and R² metrics.
+
 ![Table I](https://github.com/naabuzai/KG-MASFO/blob/main/images/Results.png)
-
-> **Table I**: The proposed KG-MASFO outperforms both single-agent and vanilla GNN models on MSE and R² metrics.
-
-| Model Variant     | MSE ↓   | R² Score ↑ |
-|-------------------|---------|------------|
-| GNN_GAT           | 0.0074  | 0.9025     |
-| Single-Agent GAT  | 0.0058  | 0.9515     |
-| **KG-MASFO**      | **0.0020** | **0.9739** |
 
 ### 📉 Loss Curve
 
