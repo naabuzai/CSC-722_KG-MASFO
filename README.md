@@ -1,7 +1,9 @@
 
 # 🌾 KG-MASFO: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
 
-<img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/MASFO_KG.png?raw=true" width="500" align="center"/>
+<p align="center">
+  <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/MASFO_KG.png?raw=true" width="500"/>
+</p>
 
 **KG-MASFO** is an explainable AI system for optimizing fertilizer recommendations using a knowledge graph (KG) constructed from real agricultural data. The system includes GNN-based multi-agent reasoning, attention fusion, symbolic interpretation, and interactive querying.
 
@@ -99,11 +101,15 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 > **Table I**: The proposed KG-MASFO outperforms both single-agent and GNN models on MSE and R² metrics.
 
-<img src="(https://github.com/naabuzai/KG-MASFO/blob/main/images/Results.png)?raw=true" width="500" align="center"/>
+<p align="center">
+  <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/Results.png?raw=true" width="500"/>
+</p>
 
 ### 📉 Loss Curve
 
-<img src="(https://github.com/naabuzai/KG-MASFO/blob/main/images/loss.png)?raw=true" width="500" align="center"/>
+<p align="center">
+  <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/loss.png?raw=true" width="500"/>
+</p>
 
 > **Fig. 3**: KG-MASFO achieves faster convergence and lowest final loss.
 
