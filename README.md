@@ -137,7 +137,7 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 ---
 
-## ✅ Final Metrics
+## ✅ Final Metrics (On Ph as an example) 
 
 | Metric              | Value       |
 |---------------------|-------------|
@@ -148,7 +148,7 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 ---
 
-## 🤖 Author Info
+##  Author Info
 
 **Author**: Nahed Abu Zaid  
 **Advisor**: Prof. Ranga R. Vatsavai  
@@ -161,5 +161,4 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 This project is released for academic use. Please cite appropriately if you use it.
 "# KG-MASFO" 
-"# KG-MASFO" 
-"# KG-MASFO" 
+
