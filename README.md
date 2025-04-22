@@ -2,7 +2,7 @@
 # 🌾 KG-MASFO: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
 
 <p align="center">
-  <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/MASFO_KG.png?raw=true" width="500"/>
+  <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/MASFO_KG.png?raw=true" width="700"/>
 </p>
 
 **KG-MASFO** is an explainable AI system for optimizing fertilizer recommendations using a knowledge graph (KG) constructed from real agricultural data. The system includes GNN-based multi-agent reasoning, attention fusion, symbolic interpretation, and interactive querying.
@@ -100,28 +100,29 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 
 > **Table I**: The proposed KG-MASFO outperforms both single-agent and GNN models on MSE and R² metrics.
-
 <p align="center">
   <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/Results.png?raw=true" width="500"/>
 </p>
 
 ### 📉 Loss Curve
-
+> **Fig. 3**: KG-MASFO achieves faster convergence and lowest final loss.
 <p align="center">
   <img src="https://github.com/naabuzai/KG-MASFO/blob/main/images/loss.png?raw=true" width="500"/>
 </p>
 
-> **Fig. 3**: KG-MASFO achieves faster convergence and lowest final loss.
 
 ---
 
 ## 📡 Data Sources
+**Location:** Isanti City, Minnesota
 
-| Source           | Description                              |
-|------------------|------------------------------------------|
-| Visual Crossing  | Real-time weather data (temp, humidity)  |
-| USDA             | Soil lab properties and field metadata   |
-| EDI Portal       | Crop growth, pesticide, and fertilizer   |
+**Data Sources Used in KG-MASFO:**
+| Source           | Description                                  |
+|------------------|----------------------------------------------|
+| [Visual Crossing](https://www.visualcrossing.com/weather-query-builder/) | Real-time weather data (temp, humidity) |
+| [USDA Web Soil Survey](https://websoilsurvey.nrcs.usda.gov/app/WebSoilSurvey.aspx) | Soil lab properties and field metadata  |
+| [EDI Portal](https://portal.edirepository.org/nis/simpleSearch) | Crop growth, pesticide, and fertilizer  |
+| [NASS Crop Data](https://www.nass.usda.gov/Statistics_by_State/Minnesota/) | Crop yield and field statistics for Minnesota |
 
 ---
 
