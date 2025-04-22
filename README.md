@@ -109,7 +109,7 @@ Soil→acidic, low NO3 × Weather→humid, cool × Crop→early stage
 
 ### 📉 Loss Curve
 
-![Fig. 3](Presentation/kgmasfo_loss_curve.png)
+![Fig. 3](https://github.com/naabuzai/KG-MASFO/blob/main/images/loss.png)
 
 > **Fig. 3**: KG-MASFO achieves faster convergence and lowest final loss.
 
