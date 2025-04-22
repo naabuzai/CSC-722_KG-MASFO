@@ -11,7 +11,6 @@
 
 - **Neo4j Knowledge Graph**: Stores soil, crop, and weather information as structured nodes and semantic relationships.
 - **GNN Domain Agents**: GATv2 and Transformer-based agents trained separately for each domain.
-- **LAMMA Fusion Layer**: Attention-driven fusion that learns weighted contributions from each domain.
 - **Post-hoc Explainability**: Symbolic and LLM-based reasoning to interpret each prediction.
 
 ---
