@@ -43,17 +43,13 @@ pip install -r requirements.txt
 - **Option 1**: Open Neo4j Desktop, create a DB, and import from `DumpFile/*.dump`
 - **Option 2**: Use `Codes/populate_neo4j.py` to load from CSVs in `DataFiles/`
 
-### 3. Train the Model
+### 3. Train the Model (Single/Multi)
+Example: 
 ```bash
 python Codes/train_multi_agent.py
 ```
 
-### 4. Evaluate and Visualize
-```bash
-python Codes/evaluate_model.py
-```
-
-### 5. Interactive Fertilizer Inference
+### 4. Interactive Fertilizer Inference (Multi)
 ```bash
 python Codes/train_multi_agent.py --interactive
 ```
