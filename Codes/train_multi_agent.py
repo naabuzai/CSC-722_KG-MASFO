@@ -719,7 +719,7 @@ def main():
                 test_true = Y_train[test_mask].cpu().numpy()
                 mse = mean_squared_error(test_true, test_pred)
                 r2 = r2_score(test_true, test_pred)
-                logging.info(f"✅ Test MSE: {mse:.5f}, R²: {r2:.5f}")
+                logging.info(f" Test MSE: {mse:.5f}, R²: {r2:.5f}")
                 
                 test_indices = torch.where(test_mask)[0].tolist()
                 if test_indices:
