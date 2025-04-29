@@ -116,7 +116,7 @@ def main():
             test_true = Y_train[test_mask].cpu().numpy()
             mse = mean_squared_error(test_true, test_pred)
             r2 = r2_score(test_true, test_pred)
-            logging.info(f"✅ [SOIL-ONLY] Test MSE: {mse:.5f}, R²: {r2:.5f}")
+            logging.info(f" [SOIL-ONLY] Test MSE: {mse:.5f}, R²: {r2:.5f}")
 
     finally:
         conn.close()
