@@ -1,6 +1,8 @@
 # 🌾 KG-F: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
 
-<img src="images/KG_F.png" alt="KG-MASFO Pipeline" width="500"/>
+<div align="center">
+  <img src="images/KG_F.png" alt="KG-MASFO Pipeline" width="600"/>
+</div>
 
 **KG-F** (formerly KG-F) is a cutting-edge explainable AI system for precision agriculture that leverages knowledge graphs and multi-agent learning to provide optimal fertilizer recommendations. Our framework integrates heterogeneous agricultural data and employs specialized Graph Attention Networks (GATv2) to capture complex soil-crop-weather interactions for dynamic, context-aware decision-making.
 
@@ -111,7 +113,9 @@ python Codes/train_multi_agent.py --interactive
 
 ### 📉 Training Dynamics
 
-![Fig. 3](images/LOSS1.png)
+<div align="center">
+  <img src="images/LOSS1.png" alt="Fig. 3" width="600"/>
+</div>
 
 > **Training Loss Comparison**: KG-F achieves fastest convergence and lowest final loss of 0.002, representing:
 > - **99.4% improvement** over Single-Agent (final loss: 0.34)
