@@ -221,4 +221,3 @@ If you use KG-F in your research, please cite our paper:
 
 **Code and Data**: Publicly available at [https://github.com/naabuzai/KG-F](https://github.com/naabuzai/KG-F)  
 **License**: Released for academic use - please cite appropriately if you use it  
-**Commercial Use**: Please contact maintainers for licensing arrangements
