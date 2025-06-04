@@ -1,6 +1,6 @@
 # 🌾 KG-F: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
 
-![KG-MASFO Pipeline](Presentation/kgmasfo_pipeline.png)
+![KG-MASFO Pipeline](Presentation/KG_F_Pipleline.png)
 
 **KG-F** (formerly KG-F) is a cutting-edge explainable AI system for precision agriculture that leverages knowledge graphs and multi-agent learning to provide optimal fertilizer recommendations. Our framework integrates heterogeneous agricultural data and employs specialized Graph Attention Networks (GATv2) to capture complex soil-crop-weather interactions for dynamic, context-aware decision-making.
 
@@ -112,7 +112,7 @@ python Codes/train_multi_agent.py --interactive
 
 ### 📉 Training Dynamics
 
-![Fig. 3](Presentation/kgmasfo_loss_curve.png)
+![Fig. 3](Presentation/LOSS1.png)
 
 > **Training Loss Comparison**: KG-F achieves fastest convergence and lowest final loss of 0.002, representing:
 > - **99.4% improvement** over Single-Agent (final loss: 0.34)
@@ -146,13 +146,12 @@ Soil→acidic pH (5.8), low NO3 (12 mg/kg) × Weather→humid (22%), cool (15°C
 
 ## 📡 Data Sources
 
-| Source | Description | Key Attributes | Location |
-|--------|-------------|----------------|----------|
-| **USDA Web Soil Survey** | Comprehensive soil characteristics | pH, organic matter, texture, depth | Isanti City, Minnesota |
-| **Visual Crossing Weather** | Real-time meteorological data | Temperature, humidity, precipitation | Regional coverage |
-| **EDI Data Portal** | Fertilizer treatment records | Nutrient content, application rates | Agricultural trials |
-| **NASS Crop Data** | Crop development and statistics | Growth stages, variety, health metrics | USDA statistics |
-
+| Source | Description | 
+|--------|-------------|
+| **USDA Web Soil Survey** | Comprehensive soil characteristics |
+| **Visual Crossing Weather** | Real-time meteorological data | 
+| **EDI Data Portal** | Fertilizer treatment records | 
+| **NASS Crop Data** | Crop development and statistics | 
 ---
 
 ## 🏗️ Model Architecture
@@ -214,7 +213,7 @@ If you use KG-F in your research, please cite our paper:
 ## 🤖 Research Team
 
 **Researcher**: Nahed Abu Zaid (naabuzai@ncsu.edu)  
-**Principal Investigator**: Prof. Ranga Raju Vatsavai (rrvatsav@ncsu.edu)  
+**Advisor**: Prof. Ranga Raju Vatsavai (rrvatsav@ncsu.edu)  
 *Department of Computer Science, North Carolina State University*
 
 ---
