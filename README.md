@@ -10,7 +10,6 @@
 
 - **Neo4j Knowledge Graph**: Stores soil, crop, fertilizer, and weather information as structured nodes and semantic relationships with domain-specific schema alignment
 - **Multi-Agent GNN Architecture**: Specialized GATv2 agents for each domain (soil, crop, weather) with sophisticated attention-based coordination
-- **LAMMA Fusion Layer**: Advanced attention-driven fusion mechanism that learns weighted contributions from domain-specific agents
 - **Post-hoc Explainability**: Comprehensive symbolic and LLM-based reasoning (Llama 3) to interpret predictions with natural language explanations
 - **Real-Time Adaptation**: Edge deployment capability for dynamic field condition response
 
