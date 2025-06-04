@@ -114,7 +114,7 @@ python Codes/train_multi_agent.py --interactive
 ### 📉 Training Dynamics
 
 <div align="center">
-  <img src="images/LOSS1.png" alt="Fig. 3" width="600"/>
+  <img src="images/LOSS1.png" alt="Fig. 3" width="800"/>
 </div>
 
 > **Training Loss Comparison**: KG-F achieves fastest convergence and lowest final loss of 0.002, representing:
