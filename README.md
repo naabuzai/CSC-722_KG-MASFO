@@ -1,4 +1,4 @@
-# KG-F: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
+# KG-F: A Knowledge Graph Framework for Fertilizer Recommendation
 
 <div align="center">
   <img src="images/KG_F.png" alt="KG-MASFO Pipeline" width="600"/>
