@@ -1,4 +1,4 @@
-# 🌾 KG-F: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
+# KG-F: Knowledge Graph-Based Multi-Agent System for Fertilizer Optimization
 
 <div align="center">
   <img src="images/KG_F.png" alt="KG-MASFO Pipeline" width="600"/>
@@ -8,7 +8,7 @@
 
 ---
 
-## 🧩 Key Modules
+## Key Modules
 
 - **Neo4j Knowledge Graph**: Stores soil, crop, fertilizer, and weather information as structured nodes and semantic relationships with domain-specific schema alignment
 - **Multi-Agent GNN Architecture**: Specialized GATv2 agents for each domain (soil, crop, weather) with sophisticated attention-based coordination
@@ -17,7 +17,7 @@
 
 ---
 
-## 🗂️ Project Structure
+## Project Structure
 
 ```
 KG-MASFO/
@@ -41,7 +41,7 @@ KG-MASFO/
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install Dependencies
 ```bash
@@ -69,9 +69,9 @@ python Codes/train_multi_agent.py --interactive
 
 ---
 
-## 🧠 System Workflow
+## System Workflow
 
-### 📍 KG Construction
+### KG Construction
 - **Input**: Heterogeneous structured CSVs (soil, crop, weather, fertilizer)
 - **Process**: Schema mapping and semantic alignment with typed nodes and edges
 - **Output**: Neo4j KG with domain-specific relationships and agricultural ontology
@@ -82,7 +82,7 @@ python Codes/train_multi_agent.py --interactive
 - **CropAgent**: Growth stage, variety, health indicators, nutrient requirements
 - **Fusion**: MetaAgent uses attention mechanisms to weight domain-specific embeddings
 
-### 🧪 Explainability Pipeline
+### Explainability Pipeline
 - **Feature Attribution**: Gradient-based importance scoring
 - **Symbolic Rule Extraction**: Domain-specific threshold mappings
 - **Template Generation**: Structured explanation framework
@@ -90,9 +90,9 @@ python Codes/train_multi_agent.py --interactive
 
 ---
 
-## 📊 Experimental Results
+## Experimental Results
 
-### 📋 Comprehensive Model Comparison
+### Comprehensive Model Comparison
 
 | Classifier | Accuracy (↑) | F1 Score (↑) | No Fert. Acc. (↑) | Fert. Acc. (↑) | R² (↑) | MSE (↓) |
 |------------|--------------|--------------|-------------------|----------------|--------|---------|
@@ -111,7 +111,7 @@ python Codes/train_multi_agent.py --interactive
 | Single-Agent | 0.8476 | 0.8477 | 0.9304 | 0.7798 | 0.8700 | 0.0230 |
 | **KG-F (Ours)** | **0.8991** | **0.8977** | **0.9472** | **0.7896** | **0.9685** | **0.0024** |
 
-### 📉 Training Dynamics
+### Training Dynamics
 
 <div align="center">
   <img src="images/LOSS1.png" alt="Fig. 3" width="800"/>
@@ -124,7 +124,7 @@ python Codes/train_multi_agent.py --interactive
 
 ---
 
-## 📈 Example Output
+## Example Output
 
 ```yaml
 Predicted Fertilizer Recommendation (kg/ha):
@@ -157,7 +157,7 @@ Soil→acidic pH (5.8), low NO3 (12 mg/kg) × Weather→humid (22%), cool (15°C
 | **NASS Crop Data** | Crop development and statistics | 
 ---
 
-## 🏗️ Model Architecture
+## Model Architecture
 
 ### Technical Specifications
 - **Agents**: GATv2 + Residual connections + TransformerConv layers
@@ -182,7 +182,7 @@ Soil→acidic pH (5.8), low NO3 (12 mg/kg) × Weather→humid (22%), cool (15°C
 
 ---
 
-## ✅ Performance Metrics
+## Performance Metrics
 
 | Metric | Value |
 |--------|-------|
@@ -196,7 +196,7 @@ Soil→acidic pH (5.8), low NO3 (12 mg/kg) × Weather→humid (22%), cool (15°C
 
 ---
 
-## 🔬 Citation
+## Citation
 
 If you use KG-F in your research, please cite our paper:
 
@@ -213,7 +213,7 @@ If you use KG-F in your research, please cite our paper:
 
 ---
 
-## 🤖 Research Team
+## Research Team
 
 **Researcher**: Nahed Abu Zaid (naabuzai@ncsu.edu)  
 **Advisor**: Prof. Ranga Raju Vatsavai (rrvatsav@ncsu.edu)  
