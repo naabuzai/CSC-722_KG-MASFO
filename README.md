@@ -26,15 +26,13 @@ KG-MASFO/
 │   ├── kg_construction.py      # Knowledge graph building
 │   ├── explanation_module.py   # Symbolic explainability
 │   ├── evaluate_model.py       # Model evaluation
-│   └── gnn_models.py          # GATv2 implementations
+│   └── GNN_GAT.py          # GATv2 implementations
 ├── DataFiles/
 │   ├── soil_data.csv          # USDA soil characteristics
 │   ├── crop_data.csv          # NASS crop information
 │   ├── weather_data.csv       # Visual Crossing weather
 │   └── fertilizer_data.csv    # EDI fertilizer treatments
 ├── DumpFile/                  # Neo4j database exports
-├── PaperDraft/               # Research paper and figures
-├── Presentation/             # Conference slides and visual pipeline diagrams
 ├── README.md                 # This file
 └── requirements.txt          # Python requirements
 ```
