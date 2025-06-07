@@ -76,7 +76,7 @@ python Codes/train_multi_agent.py --interactive
 - **Process**: Schema mapping and semantic alignment with typed nodes and edges
 - **Output**: Neo4j KG with domain-specific relationships and agricultural ontology
 
-### 👥 Multi-Agent Architecture
+### Multi-Agent Architecture
 - **SoilAgent**: pH, nutrient content, texture, organic matter analysis
 - **WeatherAgent**: Temperature, humidity, precipitation, seasonal patterns
 - **CropAgent**: Growth stage, variety, health indicators, nutrient requirements
@@ -147,7 +147,7 @@ Soil→acidic pH (5.8), low NO3 (12 mg/kg) × Weather→humid (22%), cool (15°C
 
 ---
 
-## 📡 Data Sources
+## Data Sources
 
 | Source | Description | 
 |--------|-------------|
