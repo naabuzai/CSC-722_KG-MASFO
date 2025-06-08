@@ -1,12 +1,3 @@
-# Debugged and Improved Multi-Agent GNN Code
-
-# Key Issues Fixed:
-# 1. Massive MSE values indicate scaling issues
-# 2. Negative R² value shows model performs worse than baseline
-# 3. Insufficient regularization and gradient issues
-# 4. Feature extraction improvements
-# 5. Insufficient model capacity for complex task
-
 import torch 
 import torch.nn as nn 
 import torch.nn.functional as F 
@@ -23,13 +14,10 @@ import logging
 import os 
 from tqdm import tqdm 
  
-# Import your LAMA module via LangChain's Ollama interface 
 from langchain_ollama import OllamaLLM 
  
-# Setup logging 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s') 
  
-# Set seeds for reproducibility 
 SEED = 42 
 torch.manual_seed(SEED) 
 np.random.seed(SEED) 
@@ -38,13 +26,11 @@ if torch.cuda.is_available():
     torch.cuda.manual_seed(SEED) 
     torch.backends.cudnn.deterministic = True 
  
-# Neo4j config 
 URI = "bolt://localhost:7687" 
 USER = "neo4j" 
-PASSWORD = "12345678" 
+PASSWORD = "*******" 
 DATABASE = "neo4j" 
  
-# Configuration 
 TARGET_LABELS = ["pH", "Nitrogen", "Phosphorous", "Potassium", "Calcium", "Magnesium", "NH4", "NO3"] 
 FEATURE_LABELS = [ 
     "Humidity", "temp", "tempmin", "tempmax",  
@@ -53,10 +39,9 @@ FEATURE_LABELS = [
     "Cation Exchange Capacity (cmol/kg)", "Soil Moisture (%)" 
 ] 
  
-# For the multi-agent design, we assign feature subsets: 
-WEATHER_FEATURES = ["Humidity", "temp", "tempmin", "tempmax"]       # indices 0-3 
-CROP_FEATURES = ["Expected Yield (tons/ha)", "Growth Percentage (%)"]  # indices 4-5 
-SOIL_FEATURES = ["Water Retention (%)", "Organic Matter (%)", "Cation Exchange Capacity (cmol/kg)", "Soil Moisture (%)"]  # indices 6-9 
+WEATHER_FEATURES = ["Humidity", "temp", "tempmin", "tempmax"]       
+CROP_FEATURES = ["Expected Yield (tons/ha)", "Growth Percentage (%)"]  
+SOIL_FEATURES = ["Water Retention (%)", "Organic Matter (%)", "Cation Exchange Capacity (cmol/kg)", "Soil Moisture (%)"] 
  
 NODE_TYPES = [ 
     "Soil Type", "Crop", "Weather", "Fertilizer", "PlotNumber",  
@@ -65,9 +50,6 @@ NODE_TYPES = [
     "ID1", "ID2" 
 ] 
  
-############################# 
-# Neo4j Connection and Queries 
-############################# 
 class Neo4jConnector: 
     def __init__(self): 
         try: 
@@ -98,13 +80,11 @@ class Neo4jConnector:
         result = self.execute_query(query) 
         nodes = [(r["id"], r["labels"], r["props"]) for r in result] 
          
-        # Count node types 
         node_counts = {} 
         for _, labels, _ in nodes: 
             for label in labels: 
                 node_counts[label] = node_counts.get(label, 0) + 1 
          
-        # Log major node counts (only if count > 10) 
         for node_type, count in sorted(node_counts.items(), key=lambda x: x[1], reverse=True)[:10]: 
             if count > 10: 
                 logging.info(f"{node_type} nodes: {count}") 
@@ -204,65 +184,43 @@ class Neo4jConnector:
         nodes = self.execute_query(nodes_query, {"node_types": NODE_TYPES}) 
         edges = self.execute_query(edges_query, {"node_types": NODE_TYPES}) 
         return nodes, edges 
- 
-############################# 
-# Improved Multi-Agent GNN Components 
-############################# 
 class AgentGAT(nn.Module): 
-    """ 
-    An agent built on a GATv2 backbone with improved architecture.
-    """ 
     def __init__(self, in_dim, hidden_dim, embedding_dim, num_heads=4, dropout=0.2): 
         super().__init__() 
         self.dropout = dropout 
-        # First GAT layer with multi-head attention
         self.conv1 = GATv2Conv(in_dim, hidden_dim, heads=num_heads, dropout=dropout) 
         self.bn1 = nn.BatchNorm1d(hidden_dim * num_heads) 
-        
-        # Intermediate layer to increase capacity
         self.conv_mid = GATv2Conv(hidden_dim * num_heads, hidden_dim * num_heads, heads=1, dropout=dropout)
         self.bn_mid = nn.BatchNorm1d(hidden_dim * num_heads)
-        
-        # Final layer for embedding
         self.conv2 = GATv2Conv(hidden_dim * num_heads, embedding_dim, heads=1, dropout=dropout) 
         self.bn2 = nn.BatchNorm1d(embedding_dim) 
-        
-        # Add layer normalization for further stabilization
         self.layer_norm = nn.LayerNorm(embedding_dim)
          
     def forward(self, x, edge_index): 
-        # First layer
         x = self.conv1(x, edge_index) 
         x = self.bn1(x) 
-        x = F.leaky_relu(x, negative_slope=0.2)  # Using LeakyReLU instead of ELU
+        x = F.leaky_relu(x, negative_slope=0.2)  
         x = F.dropout(x, p=self.dropout, training=self.training) 
         
-        # Intermediate layer
         residual = x
         x = self.conv_mid(x, edge_index)
         x = self.bn_mid(x)
         x = F.leaky_relu(x, negative_slope=0.2)
         x = F.dropout(x, p=self.dropout, training=self.training)
-        x = x + residual  # Skip connection
+        x = x + residual  
         
-        # Final layer
         x = self.conv2(x, edge_index) 
         x = self.bn2(x) 
         x = F.leaky_relu(x, negative_slope=0.2)
         x = F.dropout(x, p=self.dropout, training=self.training) 
-        x = self.layer_norm(x)  # Final normalization
+        x = self.layer_norm(x)  
         
         return x 
  
 class MetaAgent(nn.Module): 
-    """ 
-    Enhanced meta-agent with deeper architecture and residual connections.
-    """ 
     def __init__(self, total_embedding_dim, hidden_dims, out_dim, dropout=0.2): 
         super().__init__() 
         self.dropout = dropout
-        
-        # Deeper network with multiple hidden layers
         layers = []
         input_dim = total_embedding_dim
         
@@ -276,7 +234,6 @@ class MetaAgent(nn.Module):
         self.hidden_layers = nn.Sequential(*layers)
         self.output_layer = nn.Linear(hidden_dims[-1], out_dim)
         
-        # Initialize weights properly
         self.apply(self._init_weights)
          
     def _init_weights(self, module):
@@ -290,15 +247,10 @@ class MetaAgent(nn.Module):
         x = self.output_layer(x)
         return x 
  
-############################# 
-# Improved Data Preparation Functions 
-############################# 
 def prepare_node_features(nodes, id_map, feature_labels, soil_properties=None): 
-    """Prepare node features with improved handling of missing values.""" 
     all_features = [] 
     node_to_plot = {} 
     
-    # First pass to collect available features
     available_features = {label: [] for label in feature_labels}
     
     for i, (neo_id, labels, props) in enumerate(nodes): 
@@ -313,7 +265,6 @@ def prepare_node_features(nodes, id_map, feature_labels, soil_properties=None):
                 except (ValueError, TypeError):
                     pass
     
-    # Calculate mean and std for each feature for better filling of missing values
     feature_stats = {}
     for label in feature_labels:
         values = available_features[label]
@@ -325,7 +276,6 @@ def prepare_node_features(nodes, id_map, feature_labels, soil_properties=None):
         else:
             feature_stats[label] = {'mean': 0.0, 'std': 1.0}
     
-    # Second pass to create feature vectors with improved imputation
     for i, (neo_id, labels, props) in enumerate(nodes): 
         if neo_id not in id_map: 
             continue
@@ -338,12 +288,10 @@ def prepare_node_features(nodes, id_map, feature_labels, soil_properties=None):
                 try: 
                     value = float(props[label]) 
                 except (ValueError, TypeError): 
-                    # Use feature statistics for imputation
                     value = feature_stats[label]['mean']
             elif label in labels: 
                 value = 1.0 
             else: 
-                # More intelligent imputation using calculated statistics
                 value = feature_stats[label]['mean']
                 
             features.append(value) 
@@ -355,11 +303,9 @@ def prepare_node_features(nodes, id_map, feature_labels, soil_properties=None):
     return np.array(all_features), node_to_plot 
  
 def prepare_target_values(node_to_plot, soil_properties, target_labels, num_nodes): 
-    """Prepare target values with better missing value handling.""" 
     targets = np.full((num_nodes, len(target_labels)), np.nan) 
     mask = np.zeros(num_nodes, dtype=bool) 
     
-    # First collect all available values for each target
     target_values = {label: [] for label in target_labels}
     
     for plot_id, props in soil_properties.items():
@@ -371,7 +317,6 @@ def prepare_target_values(node_to_plot, soil_properties, target_labels, num_node
                 except (ValueError, TypeError):
                     continue
     
-    # Calculate robust statistics for each target
     target_stats = {}
     for label in target_labels:
         values = target_values[label]
@@ -384,7 +329,6 @@ def prepare_target_values(node_to_plot, soil_properties, target_labels, num_node
         else:
             target_stats[label] = {'median': 0.0, 'q1': -1.0, 'q3': 1.0}
     
-    # Fill in target values with better imputation
     for node_idx, plot_id in node_to_plot.items(): 
         if plot_id in soil_properties: 
             props = soil_properties[plot_id] 
@@ -397,10 +341,8 @@ def prepare_target_values(node_to_plot, soil_properties, target_labels, num_node
                         targets[node_idx, i] = value
                         valid_props += 1
                     except (ValueError, TypeError): 
-                        # Use median for imputation
                         targets[node_idx, i] = target_stats[label]['median']
                 else:
-                    # Use median for missing values
                     targets[node_idx, i] = target_stats[label]['median']
                     
             if valid_props >= len(target_labels) // 2: 
@@ -408,21 +350,15 @@ def prepare_target_values(node_to_plot, soil_properties, target_labels, num_node
                 
     logging.info(f"Found {mask.sum()} nodes with valid target values") 
     
-    # For any remaining NaN values, use robust imputation
     for i in range(len(target_labels)): 
         col_mask = np.isnan(targets[:, i]) 
         if col_mask.any(): 
             targets[col_mask, i] = target_stats[target_labels[i]]['median']
             
     return targets, mask 
- 
-############################# 
-# LAMA Explainability Component 
-############################# 
+
 class LlamaExplainability: 
-    """ 
-    A post-hoc explainability module using a LAMA-based model. 
-    """ 
+ 
     def __init__(self, model_name="llama3"): 
         try:
             self.llm = OllamaLLM(model=model_name) 
@@ -436,11 +372,9 @@ class LlamaExplainability:
         if self.llm is None:
             return "Explainability module not available."
             
-        # Format features with their names for better context
         formatted_features = {name: value for name, value in zip(feature_names, features)}
         formatted_predictions = {name: value for name, value in zip(target_names, prediction)}
         
-        # Format the prompt with more context and structure
         prompt = ( 
             "You are a precision agriculture expert. Analyze this soil data and recommendation:\n\n" 
             f"Input Measurements:\n{formatted_features}\n\n" 
@@ -465,10 +399,6 @@ class LlamaExplainability:
         except Exception as e:
             logging.error(f"Failed to generate explanation: {e}")
             return "Could not generate explanation due to an error."
- 
-############################# 
-# Main training function with improved implementation
-############################# 
 def main(): 
     conn = Neo4jConnector() 
     try: 
@@ -480,7 +410,6 @@ def main():
         features, node_to_plot = prepare_node_features(nodes, node_id_map, FEATURE_LABELS, soil_properties) 
         targets, mask = prepare_target_values(node_to_plot, soil_properties, TARGET_LABELS, len(features)) 
         
-        # Detect and log potential data issues
         if not mask.any(): 
             logging.warning("No valid targets found. Using synthetic data for demonstration.") 
             node_indices = np.random.choice(len(features), size=min(50, len(features)), replace=False) 
@@ -488,7 +417,6 @@ def main():
             mask[node_indices] = True 
             targets = np.random.rand(len(features), len(TARGET_LABELS)) * 10 
         else:
-            # Log target value ranges to detect scaling issues
             for i, label in enumerate(TARGET_LABELS):
                 target_min = np.min(targets[mask, i])
                 target_max = np.max(targets[mask, i])
@@ -517,22 +445,14 @@ def main():
                          
         X = torch.tensor(features, dtype=torch.float) 
         
-        # Fix scaling issues with target values by using robust scaling
         Y_np = targets[mask]
         feature_scaler = RobustScaler()
         target_scaler = RobustScaler()
-        
-        # Scale features
         X_normalized_np = feature_scaler.fit_transform(features)
         X_normalized = torch.tensor(X_normalized_np, dtype=torch.float)
-        
-        # Scale targets - IMPORTANT FIX for the large MSE values
         Y_scaled_np = target_scaler.fit_transform(Y_np)
         Y = torch.tensor(Y_scaled_np, dtype=torch.float)
-        
         edge_index = torch.tensor(edge_list, dtype=torch.long).t().contiguous() 
-         
-        # Create train/val/test splits
         node_indices = np.where(mask)[0] 
         if len(node_indices) == 0: 
             logging.error("No valid target nodes found. Cannot train model.") 
@@ -549,77 +469,59 @@ def main():
         train_mask = torch.tensor([i in train_idx for i in range(len(features))], dtype=torch.bool) 
         val_mask = torch.tensor([i in val_idx for i in range(len(features))], dtype=torch.bool) 
         test_mask = torch.tensor([i in test_idx for i in range(len(features))], dtype=torch.bool) 
-         
-        # Split normalized feature matrix into subdomains: 
         X_weather = X_normalized[:, 0:4] 
         X_crop = X_normalized[:, 4:6] 
         X_soil = X_normalized[:, 6:10] 
-         
-        # Increase model capacity for better learning
-        hidden_dim = 32  # Increased from 16
-        emb_dim = 64     # Increased from 32
-        
-        # Create our agent models with improved architecture
+        hidden_dim = 32  
+        emb_dim = 64     
         agent_weather = AgentGAT(in_dim=4, hidden_dim=hidden_dim, embedding_dim=emb_dim, num_heads=4, dropout=0.2) 
         agent_crop = AgentGAT(in_dim=2, hidden_dim=hidden_dim, embedding_dim=emb_dim, num_heads=4, dropout=0.2) 
         agent_soil = AgentGAT(in_dim=4, hidden_dim=hidden_dim, embedding_dim=emb_dim, num_heads=4, dropout=0.2) 
-        
         total_embedding_dim = emb_dim * 3 
-        # Use deeper meta-agent with multiple hidden layers
         meta_agent = MetaAgent(
             total_embedding_dim=total_embedding_dim, 
-            hidden_dims=[256, 128, 64],  # Multiple hidden layers
+            hidden_dims=[256, 128, 64], 
             out_dim=len(TARGET_LABELS),
             dropout=0.2
         )
-        
-        # Use AdamW with weight decay and a proper learning rate
         optimizer = torch.optim.AdamW( 
             list(agent_weather.parameters()) + 
             list(agent_crop.parameters()) + 
             list(agent_soil.parameters()) + 
             list(meta_agent.parameters()), 
-            lr=0.0005,  # Lower learning rate for stability
-            weight_decay=1e-4  # Increased weight decay for regularization
+            lr=0.0005,  
+            weight_decay=1e-4  
         ) 
         
-        # Learning rate scheduler
         scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau( 
             optimizer, mode='min', factor=0.5, patience=15, verbose=True, min_lr=1e-6
         ) 
         
-        # Use Huber loss for robustness against outliers
-        loss_fn = nn.HuberLoss(delta=1.0)  # Changed from MSELoss
+        loss_fn = nn.HuberLoss(delta=1.0)  
          
         best_val_loss = float('inf') 
         best_state = None 
-        patience = 40  # Increased from 30
+        patience = 40  
         patience_counter = 0 
         train_losses = [] 
         val_losses = [] 
-        
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') 
         logging.info(f"Using device: {device}") 
-        
-        # Move models to device
         agent_weather = agent_weather.to(device) 
         agent_crop = agent_crop.to(device) 
         agent_soil = agent_soil.to(device) 
         meta_agent = meta_agent.to(device) 
         
-        # Move data to device
         X_weather = X_weather.to(device) 
         X_crop = X_crop.to(device) 
         X_soil = X_soil.to(device) 
         edge_index = edge_index.to(device) 
         
-        # Create full target tensor
         Y_train = torch.zeros((len(features), len(TARGET_LABELS)), dtype=torch.float).to(device) 
         Y_train[mask] = Y.to(device) 
          
         logging.info("Starting multi-agent training with improved implementation...") 
-        for epoch in range(500):  # Increased epochs from 300
-            # Training phase
+        for epoch in range(500):  
             agent_weather.train()
             agent_crop.train()
             agent_soil.train()
@@ -627,44 +529,38 @@ def main():
             
             optimizer.zero_grad() 
             
-            # Forward pass
             emb_weather = agent_weather(X_weather, edge_index) 
             emb_crop = agent_crop(X_crop, edge_index) 
             emb_soil = agent_soil(X_soil, edge_index) 
             fused_embedding = torch.cat([emb_weather, emb_crop, emb_soil], dim=1) 
             pred = meta_agent(fused_embedding) 
              
-            # Calculate loss with L2 regularization
             loss = loss_fn(pred[train_mask], Y_train[train_mask]) 
             
-            # Add L2 regularization explicitly
             l2_reg = 0
             for name, param in meta_agent.named_parameters():
                 if 'weight' in name:
                     l2_reg += torch.norm(param, p=2)
             
-            loss += 5e-5 * l2_reg  # Adjusted regularization strength
+            loss += 5e-5 * l2_reg  
              
             if torch.isnan(loss): 
                 logging.warning(f"NaN loss detected at epoch {epoch}, skipping update")
                 continue
              
-            # Backward pass and optimization
             loss.backward() 
             
-            # Gradient clipping for stability
             torch.nn.utils.clip_grad_norm_(
                 list(agent_weather.parameters()) + 
                 list(agent_crop.parameters()) + 
                 list(agent_soil.parameters()) + 
                 list(meta_agent.parameters()), 
-                max_norm=0.5  # Reduced from 1.0 for more stability
+                max_norm=0.5 
             )
             
             optimizer.step() 
             train_losses.append(loss.item()) 
             
-            # Validation
             agent_weather.eval(); agent_crop.eval(); agent_soil.eval(); meta_agent.eval()
             with torch.no_grad():
                 emb_weather_val = agent_weather(X_weather, edge_index)
@@ -705,7 +601,6 @@ def main():
             agent_soil.load_state_dict(best_state['agent_soil'])
             meta_agent.load_state_dict(best_state['meta_agent'])
         
-        # Evaluation on Test Set
         agent_weather.eval(); agent_crop.eval(); agent_soil.eval(); meta_agent.eval()
         with torch.no_grad():
             emb_weather_test = agent_weather(X_weather, edge_index)
@@ -746,12 +641,8 @@ def main():
                     plt.legend()
                     plt.savefig('learning_curves_multi_agent.png')
                     plt.close()
-                    
-                    # ----- LAMA-based Explanation Integration -----
-                    # For demonstration, we explain the first test sample's prediction.
                     explainer = LlamaExplainability(model_name="llama3")
                     sample_idx = test_indices[0]
-                    # Prepare feature vector and prediction (convert to list for better formatting)
                     sample_features = X[sample_idx].tolist()
                     sample_prediction = test_pred[0].tolist()
                     sample_truth = test_true[0].tolist()
