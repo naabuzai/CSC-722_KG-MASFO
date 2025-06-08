@@ -6,7 +6,7 @@ from torch_geometric.nn import GCNConv
 import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 
-file_path = "C:\\Users\\ALIENWARE\\Downloads\\Fertilizer_Data.csv"
+file_path = "..\\Fertilizer_Data.csv"  # add your data here 
 df = pd.read_csv(file_path)
 
 soil_types = sorted(df["Soil Type"].unique())
