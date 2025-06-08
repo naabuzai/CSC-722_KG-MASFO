@@ -9,10 +9,7 @@ from sklearn.metrics import mean_squared_error, r2_score
 import logging
 import pandas as pd
 import matplotlib.pyplot as plt
-
-# Dummy data loading functions and variables for brevity
-# Replace these with actual logic from nahed.py
-from nahed import (
+from NEO4j_Connect import (
     Neo4jConnector, prepare_node_features, prepare_target_values,
     FEATURE_LABELS, TARGET_LABELS, NODE_TYPES, AgentGAT, MetaAgent
 )
@@ -27,7 +24,6 @@ def main():
         features, node_to_plot = prepare_node_features(nodes, node_id_map, FEATURE_LABELS, soil_properties)
         targets, mask = prepare_target_values(node_to_plot, soil_properties, TARGET_LABELS, len(features))
 
-        # Basic checks
         if not mask.any():
             logging.warning("No valid targets found. Exiting.")
             return
@@ -42,7 +38,6 @@ def main():
                 if i != j:
                     edge_list.append((i, j))
 
-        # Preprocess
         feature_scaler = RobustScaler()
         target_scaler = RobustScaler()
         X_normalized = feature_scaler.fit_transform(features)
@@ -64,7 +59,6 @@ def main():
         val_mask = torch.tensor([i in val_idx for i in range(len(features))], dtype=torch.bool)
         test_mask = torch.tensor([i in test_idx for i in range(len(features))], dtype=torch.bool)
 
-        # Models
         hidden_dim = 32
         emb_dim = 64
         agent_soil = AgentGAT(in_dim=4, hidden_dim=hidden_dim, embedding_dim=emb_dim, num_heads=4, dropout=0.2)
@@ -108,7 +102,6 @@ def main():
             if epoch % 10 == 0:
                 logging.info(f"Epoch {epoch}: Train Loss = {loss.item():.4f}, Val Loss = {val_loss.item():.4f}")
 
-        # Test Evaluation
         agent_soil.eval()
         meta_agent.eval()
         with torch.no_grad():
